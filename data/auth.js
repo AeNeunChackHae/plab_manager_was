@@ -19,3 +19,10 @@ export async function createUser(user) {
     return db.execute(authQuery.insertUser , [phone_number, email, login_password, manager_name])
         .then((result) => result[0].insertId)
 }
+
+// 사용자 ID로 찾기
+export async function findById(id) {
+    const query = 'SELECT * FROM PFB_MANAGER WHERE id=?';
+    return db.execute(query, [id])
+      .then((result) => result[0][0]);
+  }
