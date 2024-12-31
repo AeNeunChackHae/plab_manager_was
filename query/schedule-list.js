@@ -17,6 +17,7 @@ export const getAllMatchesQuery = `
   WHERE 
       DATE(M.match_start_time) BETWEEN DATE_ADD(CURDATE(), INTERVAL 15 DAY) 
       AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+      AND (M.manager_id IS NULL OR M.manager_id = '')
   ORDER BY 
       DATE(M.match_start_time) ASC,
       M.match_start_time ASC;

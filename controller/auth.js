@@ -68,6 +68,7 @@ export async function login(req, res, next) {
 // 토큰 인증
 export async function verify(req, res, next) {
     const token = req.header['Token']
+    console.log('Token 인증 확인', token)
     if(token){
         res.status(200).json(token)
     }
