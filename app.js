@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { config } from "./config.js";
 import authRouter from "./router/auth.js"
 import scheduleRouter from "./router/schedule-list.js"
+import matchRouter from "./router/match.js"
 import cors from "cors";
 
 dotenv.config();
@@ -25,8 +26,8 @@ app.use(
 // 테스트용 라우트
 const port = config.hosting_port.manager_back
 app.use("/auth", authRouter)
-app.use("/manager", scheduleRouter)
-
+app.use("/schedule-list", scheduleRouter)
+app.use("/match", matchRouter)
 
 // 서버 시작
 app.listen(port, () => {
