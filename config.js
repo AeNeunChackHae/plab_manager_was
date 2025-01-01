@@ -68,6 +68,7 @@ export const config = {
     match_level_limit_code: getEnvValue("MATCH_LEVEL_LIMIT_CODE"),
     applicant_status_code: getEnvValue("APPLICANT_STATUS_CODE"),
     match_type_code: getEnvValue("MATCH_TYPE_CODE"),
+    match_time_table: getEnvValue("MATCH_TIME_TABLE"),
     match_team_type_code: getEnvValue("MATCH_TEAM_TYPE_CODE"),
     match_result_code: getEnvValue("MATCH_RESULT_CODE"),
     match_reservation_status_code: getEnvValue("MATCH_RESERVATION_STATUS_CODE"),
@@ -95,6 +96,7 @@ export const config = {
     region_busan_code: getEnvValue("REGION_BUSAN_CODE"),
     region_seoul_code: getEnvValue("REGION_SEOUL_CODE"),
   },
+  
   manager: {
     manager_status_code: getEnvValue("MANAGER_STATUS_CODE"),
   },
@@ -122,5 +124,8 @@ export const config = {
   fileUpload: {
     admin_stadium_input_name: getEnvValue("ADMIN_STADIUM_REGIST"),
     was_upload_directory: getEnvValue("WAS_UPLOAD_DIRECTORY"),
+  },
+  profile:{
+    basic_profile_path: getEnvValue("BASIC_PROFILE_PATH"),
   }
 };
