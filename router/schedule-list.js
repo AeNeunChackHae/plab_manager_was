@@ -5,7 +5,6 @@ import { isAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/schedule-list', isAuth, fetchMatchSchedule);
-router.post('/my-matches', fetchMyMatches);
+router.post('/', isAuth, fetchMatchSchedule);
 
 export default router;

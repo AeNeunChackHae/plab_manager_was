@@ -10,6 +10,7 @@ export const isAuth = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
+  console.log('Token 확인', token)
 
   jwt.verify(token, config.jwt.secretKey, async (error, decoded) => {
     if (error) {
