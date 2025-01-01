@@ -1,6 +1,8 @@
-// import express from 'express';
-// import { fetchMyMatches } from '../controller/my-matches.js';
+import express from 'express';
+import { fetchMyMatches } from '../controller/my-matches.js';
 
 
-// const router = express.Router();
-// router.post('/my-matches', fetchMyMatches);
+const router = express.Router();
+router.post('/my', fetchMyMatches);
+
+export default router;

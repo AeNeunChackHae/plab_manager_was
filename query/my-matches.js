@@ -7,6 +7,7 @@ export const getMatchesByUserIdQuery = `
       M.stadium_id,
       M.allow_gender,
       M.level_criterion,
+      M.status_code,
       S.stadium_name,
       S.main_region,
       S.full_address
