@@ -6,7 +6,7 @@ import { config } from '../config.js'
 
 async function createJwtToken(id) {
     return jwt.sign(
-    {id}, config.jwt.secretKey, {expiresIn: config.jwt.expiresInSec})
+    {id}, config.jwt.manager_secretKey, {expiresIn: config.jwt.expiresInSec})
 }
 
 // 회원가입
@@ -47,6 +47,9 @@ export async function login(req, res, next) {
       if (!user) {
         return res.status(401).json({ message: "등록된 이메일이 없습니다." });
       }
+       if (user.status_code === 0) {
+        return res.status(403).json({ message: "승인 대기 중인 계정입니다." });
+    }
   
       // 비밀번호 검증
       const isValidPassword = await bcrypt.compare(login_password, user.login_password);

@@ -2,6 +2,11 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+function getEnvValueConvertUnderbar(key){
+  let value = process.env[key];
+  value.replace(/_/g, ' ')
+}
+
 function getEnvValue(key) {
   let value = process.env[key];
   if (value && value.startsWith("[")) {
@@ -32,6 +37,7 @@ export const config = {
     coupon_status_code: getEnvValue("COUPON_STATUS_CODE"),
     friend_status_code: getEnvValue("FRIEND_STATUS_CODE"),
     level_type_code: getEnvValue("LEVEL_TYPE_CODE"),
+    level_image_name_code: getEnvValue("LEVEL_IMAGE_NAME"),
     gender_type_code: getEnvValue("GENDER_TYPE_CODE"),
     card_type_code: getEnvValue("CARD_TYPE_CODE"),
     card_reason_code: getEnvValue("CARD_REASON_CODE"),
@@ -105,9 +111,12 @@ export const config = {
   admin_account: {
     account: getEnvValue("ADMIN_ACCOUNT"),
     password: getEnvValue("ADMIN_PASSWORD"),
+    email: getEnvValue("ADMIN_EMAIL")
   },
   jwt: {
-    secretKey: getEnvValue("JWT_SECRET"),
+    user_secretKey: getEnvValue("USER_JWT_SECRET"),
+    manager_secretKey: getEnvValue("MANAGER_JWT_SECRET"),
+    admin_secretKey: getEnvValue("ADMIN_JWT_SECRET"),
     expiresInSec: parseInt(getEnvValue("JWT_EXPIRES_SEC", 259200)),
   },
   bcrypt: {
@@ -126,5 +135,10 @@ export const config = {
   },
   profile:{
     basic_profile_path: getEnvValue("BASIC_PROFILE_PATH"),
+  },
+  scheduler:{
+    match_status_change_cron:getEnvValueConvertUnderbar('MATCH_STATUS_CHANGE_CRON'),
+    match_regist_cron:getEnvValueConvertUnderbar('MATCH_REGIST_CRON'),
+    match_regist_delay_date:getEnvValue("MATCH_REGIST_DELAY_DATE"),
   }
 };
