@@ -2,7 +2,8 @@ import * as authRepository from '../data/auth.js'
 import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { config } from '../config.js'
-
+import { hashPassword, generateTemporaryPassword } from "../utils/password.js";
+import { sendEmail } from "../utils/email.js";
 
 async function createJwtToken(id) {
     return jwt.sign(
@@ -85,3 +86,68 @@ export async function me(req, res, next) {
     }
     res.status(200).json({token: req.token, id: user.id})
 }
+
+// 이메일 찾기위한 유저  확인인
+export async function findEmailController(req, res) {
+  const { username, phoneNumber } = req.body;
+  console.log('username, phoneNumber',username, phoneNumber)
+
+  // 입력 값 검증
+  if (!username || !phoneNumber) {
+    return res.status(400).json({ message: '모든 필드를 입력해야 합니다.' });
+  }
+
+  try {
+    const email = await authRepository.findEmailByUserInfo(username, phoneNumber);
+
+    if (!email) {
+      return res.status(404).json({ message: '일치하는 사용자를 찾을 수 없습니다.' });
+    }
+
+    res.status(200).json({ email });
+  } catch (error) {
+    console.error('Error in findEmailController:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+}
+
+// 비밀번호 찾기 및 재설정정
+export async function sendResetPasswordEmail(req, res) {
+    console.log('리엑트에서 쐈음')
+    const { name, phoneNumber, email } = req.body;
+    console.log(' name, phoneNumber, email', name, phoneNumber, email)
+  
+    // 입력값 검증
+    if (!name || !phoneNumber || !email) {
+      return res.status(400).json({ message: "모든 필드를 입력해야 합니다." });
+    }
+  
+    try {
+      // 유저 정보 조회
+      const user = await authRepository.findUserByInfo(name, phoneNumber, email);
+      console.log('user',user)
+  
+      if (!user) {
+        return res.status(404).json({ message: "일치하는 사용자를 찾을 수 없습니다." });
+      }
+  
+      // 임시 비밀번호 생성 및 해시화
+      const temporaryPassword = generateTemporaryPassword();
+      const hashedPassword = await hashPassword(temporaryPassword);
+  
+      // DB에 비밀번호 업데이트
+      await authRepository.updatePassword(user.id, hashedPassword);
+  
+      // 이메일 전송
+      await sendEmail({
+        to: email, // 유저 이메일
+        subject: "임시 비밀번호 발급",
+        text: `안녕하세요, ${name}님.\n\n임시 비밀번호는 다음과 같습니다: ${temporaryPassword}\n로그인 후 반드시 비밀번호를 변경해주세요. \n임시 비밀번호인 만큼, 로그인하신 후 직접 비밀번호를 꼭 변경해 주세요.`,
+      });
+  
+      res.status(200).json({ message: "임시 비밀번호가 이메일로 전송되었습니다." });
+    } catch (error) {
+      console.error("Error in sendResetPasswordEmail:", error);
+      res.status(500).json({ message: "이메일 전송 중 오류가 발생했습니다." });
+    }
+  }

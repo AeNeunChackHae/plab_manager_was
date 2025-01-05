@@ -1,8 +1,10 @@
 import express from 'express';
-import { fetchMyMatches } from '../controller/my-matches.js';
-
+import { isAuth } from '../middleware/auth.js';
+import * as mymatchController from '../controller/my-matches.js';
 
 const router = express.Router();
-router.post('/my', fetchMyMatches);
+
+router.post('/my', isAuth, mymatchController.fetchMyMatches);
+router.post('/cancel', isAuth, mymatchController.cancelMatchController);
 
 export default router;

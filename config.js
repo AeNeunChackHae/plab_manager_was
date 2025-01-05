@@ -140,5 +140,9 @@ export const config = {
     match_status_change_cron:getEnvValueConvertUnderbar('MATCH_STATUS_CHANGE_CRON'),
     match_regist_cron:getEnvValueConvertUnderbar('MATCH_REGIST_CRON'),
     match_regist_delay_date:getEnvValue("MATCH_REGIST_DELAY_DATE"),
-  }
+  },
+  nodemailer: {
+    email: getEnvValue("MANAGER_EMAIL_ACCOUNT"),
+    password: getEnvValue("MANAGER_EMAIL_PASSWORD"),
+  },
 };

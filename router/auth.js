@@ -29,4 +29,10 @@ router.post('/login', validateLogin, authController.login)
 // 로그인 유지
 router.get('/me', isAuth, authController.me)
 
+// 이메일 찾기
+router.post('/find-email', authController.findEmailController)
+
+// 비밀번호 찾기
+router.post('/find-password', authController.sendResetPasswordEmail)
+
 export default router
