@@ -15,7 +15,7 @@ export const getAllMatchesQuery = `
   JOIN 
       PFB_STADIUM S ON M.stadium_id = S.id
   WHERE 
-      DATE(M.match_start_time) BETWEEN DATE_ADD(CURDATE(), INTERVAL 15 DAY) 
+      DATE(M.match_start_time) BETWEEN DATE_ADD(CURDATE(), INTERVAL 7 DAY) 
       AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
       AND (M.manager_id IS NULL OR M.manager_id = '')
   ORDER BY 

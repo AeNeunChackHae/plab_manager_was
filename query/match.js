@@ -1,4 +1,6 @@
-export const getMatcheDetailQuery = `
+export const matchQuery = {
+    getMatcheDetailQuery :
+    `
     SELECT 
         M.id AS match_id,
         M.stadium_id,
@@ -16,10 +18,26 @@ export const getMatcheDetailQuery = `
         PFB_STADIUM S ON M.stadium_id = S.id
     WHERE 
         M.id = ?;
-`;
+    `,
 
-export const applyMatchQuery = `
-    UPDATE PFB_MATCH 
-         SET manager_id = ? 
-         WHERE id = ? AND manager_id IS NULL
-`;
+    applyMatchQuery :
+     `
+        UPDATE PFB_MATCH 
+            SET manager_id = ? 
+            WHERE id = ? AND manager_id IS NULL
+    `,
+
+    getPlayersByMatchIdQuery : 
+    `
+    SELECT u.id, u.username, u.level_code
+    FROM PFB_USER u
+    JOIN PFB_MATCH_USER mu ON u.id = mu.user_id
+    WHERE mu.match_id = ?;
+    `,
+
+    insertCardQuery :
+    `
+        INSERT INTO PFB_CARD (user_id, match_id, card_type, description_code)
+        VALUES (?, ?, ?, ?);
+    `,
+}

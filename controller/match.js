@@ -70,13 +70,33 @@ export async function fetchPlayers(req, res) {
     }
   }
   
-  // 카드를 부여하는 컨트롤러 함수
-  export async function assignCardToPlayer(req, res) {
+  export async function saveMatchCards(req, res) {
     try {
-      const { userId, matchId, cardType, descriptionCode } = req.body;
-      const result = await matchData.assignCard(userId, matchId, cardType, descriptionCode);
-      res.status(200).json({ message: '카드가 성공적으로 부여되었습니다.', data: result });
+      const { matchId, cards } = req.body;
+  
+      if (!matchId || !cards || !Array.isArray(cards)) {
+        return res.status(400).json({ message: '매치 ID와 유효한 카드 데이터가 필요합니다.' });
+      }
+  
+      console.log('받아온 matchId:', matchId);
+      console.log('받아온 카드 데이터:', cards);
+  
+      for (const { userId, cardType, descriptionCode } of cards) {
+        if (!userId || cardType === undefined || descriptionCode === undefined) {
+          throw new Error(`유효하지 않은 카드 데이터: ${JSON.stringify({ userId, cardType, descriptionCode })}`);
+        }
+  
+        // matchData의 assignCard 호출
+        await matchData.assignCard(userId, matchId, cardType, descriptionCode);
+      }
+  
+      console.log('카드 데이터 저장 성공');
+      res.status(200).json({ message: '경기 데이터가 성공적으로 저장되었습니다.' });
     } catch (error) {
-      res.status(500).json({ message: '카드 부여에 실패했습니다.', error: error.message });
+      console.error('경기 데이터 저장 오류:', error);
+      res.status(500).json({
+        message: '경기 데이터를 저장하는 중 오류가 발생했습니다.',
+        error: error.message,
+      });
     }
   }
