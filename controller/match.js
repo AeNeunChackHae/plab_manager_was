@@ -100,3 +100,19 @@ export async function fetchPlayers(req, res) {
       });
     }
   }
+
+  // 플레이어 레벨 업데이트
+export const adjustPlayerLevel = async (req, res) => {
+  console.log('잘들어옴옴')
+  const { userId, levelChange } = req.body;
+  console.log('userId, levelChange',userId, levelChange)
+  
+  try {
+    const newLevel = levelChange; // 실제 레벨 계산 로직은 클라이언트에서 넘겨받거나 정의할 수 있습니다.
+    const result = await matchData.updatePlayerLevel(userId, newLevel);
+    res.status(200).json({ message: '레벨 업데이트 성공', result });
+  } catch (error) {
+    console.error('레벨 업데이트 오류:', error);
+    res.status(500).json({ message: '레벨 업데이트 실패', error: error.message });
+  }
+};

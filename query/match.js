@@ -40,4 +40,8 @@ export const matchQuery = {
         INSERT INTO PFB_CARD (user_id, match_id, card_type, description_code)
         VALUES (?, ?, ?, ?);
     `,
+    updatePlayerLevelQuery : 
+    `
+      UPDATE PFB_USER SET level_code = ? WHERE id = ?;
+    `,
 }
