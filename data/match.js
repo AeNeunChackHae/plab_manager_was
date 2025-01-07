@@ -37,3 +37,13 @@ export async function assignCard(userId, matchId, cardType, descriptionCode) {
         throw new Error('카드를 부여하는 중 오류 발생');
     }
 }
+
+// 플레이어의 레벨을 업데이트
+export const updatePlayerLevel = async (userId, newLevel) => {
+  try {
+    const result = await db.execute(matchQuery.updatePlayerLevelQuery, [newLevel, userId]);
+    return result;
+  } catch (error) {
+    throw new Error('레벨 업데이트 오류: ' + error.message);
+  }
+};
