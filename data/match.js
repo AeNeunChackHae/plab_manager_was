@@ -41,6 +41,7 @@ export async function assignCard(userId, matchId, cardType, descriptionCode) {
 // 플레이어의 레벨을 업데이트
 export const updatePlayerLevel = async (userId, newLevel) => {
   try {
+    // 새로운 레벨로 업데이트
     const result = await db.execute(matchQuery.updatePlayerLevelQuery, [newLevel, userId]);
     return result;
   } catch (error) {

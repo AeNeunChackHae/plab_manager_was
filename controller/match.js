@@ -101,16 +101,43 @@ export async function fetchPlayers(req, res) {
     }
   }
 
-  // 플레이어 레벨 업데이트
+// 플레이어 레벨 업데이트
 export const adjustPlayerLevel = async (req, res) => {
-  console.log('잘들어옴옴')
-  const { userId, levelChange } = req.body;
-  console.log('userId, levelChange',userId, levelChange)
+  console.log('잘 들어옴');
   
+  // 클라이언트에서 넘어온 배열인 players를 받음
+  const { players } = req.body;
+
+  console.log('players', players); // players 배열을 로그로 찍어서 확인
+
+  // 유효하지 않은 데이터가 있을 경우 400 오류 반환
+  if (!players || !Array.isArray(players)) {
+    return res.status(400).json({ message: 'Invalid players data' });
+  }
+
+  // players 배열에서 유효하지 않은 항목을 필터링 (null, undefined, 잘못된 형식)
+  const validPlayers = players.filter(player => player && player.userId && player.level !== undefined);
+  
+  if (validPlayers.length !== players.length) {
+    console.error('Invalid player data detected');
+    return res.status(400).json({ message: 'Some player data is invalid' });
+  }
+
+  console.log('validPlayers', validPlayers); // 유효한 데이터 확인
+
   try {
-    const newLevel = levelChange; // 실제 레벨 계산 로직은 클라이언트에서 넘겨받거나 정의할 수 있습니다.
-    const result = await matchData.updatePlayerLevel(userId, newLevel);
-    res.status(200).json({ message: '레벨 업데이트 성공', result });
+    // 모든 유효한 플레이어의 레벨 업데이트
+    const updatePromises = validPlayers.map(async (player) => {
+      const { userId, level } = player;
+      // 서버에서 레벨 업데이트 로직 처리 (예시: DB 업데이트)
+      const result = await matchData.updatePlayerLevel(userId, level); // matchData는 데이터베이스 업데이트 함수
+      return result;
+    });
+
+    // 비동기 처리 후 모든 레벨 업데이트 결과 반환
+    const results = await Promise.all(updatePromises);
+    
+    res.status(200).json({ message: '레벨 업데이트 성공', results });
   } catch (error) {
     console.error('레벨 업데이트 오류:', error);
     res.status(500).json({ message: '레벨 업데이트 실패', error: error.message });
