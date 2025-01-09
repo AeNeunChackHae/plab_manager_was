@@ -48,3 +48,55 @@ export const updatePlayerLevel = async (userId, newLevel) => {
     throw new Error('레벨 업데이트 오류: ' + error.message);
   }
 };
+
+export async function updateMatchUserPositions(players) {
+  try {
+    const connection = await db.getConnection(); // 트랜잭션 시작
+    await connection.beginTransaction();
+
+    for (const player of players) {
+      const { match_id, user_id, user_team, user_number } = player;
+
+      await connection.execute(matchQuery.updateMatchUserPositionsQuery, [
+        user_team,
+        user_number,
+        match_id,
+        user_id,
+      ]);
+    }
+
+    await connection.commit();
+    connection.release();
+    return true;
+  } catch (error) {
+    if (connection) await connection.rollback(); // 트랜잭션 롤백
+    console.error('PFB_MATCH_USER 업데이트 실패:', error.message);
+    throw error;
+  }
+}
+
+export async function updateAbsentPlayers(absentPlayers) {
+  try {
+    const connection = await db.getConnection(); // 트랜잭션 시작
+    await connection.beginTransaction();
+
+    for (const player of absentPlayers) {
+      const { match_id, user_id, status_code } = player;
+
+      // 불참 처리 시 슬롯 정보 초기화
+      await connection.execute(matchQuery.updateAbsentPlayersQuery, [
+        status_code, // 불참 상태 코드
+        match_id,
+        user_id,
+      ]);
+    }
+
+    await connection.commit();
+    connection.release();
+    return true;
+  } catch (error) {
+    if (connection) await connection.rollback(); // 트랜잭션 롤백
+    console.error('불참 상태 업데이트 실패:', error.message);
+    throw error;
+  }
+}

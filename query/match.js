@@ -44,4 +44,17 @@ export const matchQuery = {
     `
       UPDATE PFB_USER SET level_code = ? WHERE id = ?;
     `,
+    updateMatchUserPositionsQuery: 
+    `
+        UPDATE PFB_MATCH_USER
+        SET user_team = ?, user_number = ?
+        WHERE match_id = ? AND user_id = ?;
+    `,
+    updateAbsentPlayersQuery:
+    `
+        UPDATE PFB_MATCH_USER
+        SET status_code = ?, user_team = NULL, user_number = NULL
+        WHERE match_id = ? AND user_id = ?;
+    `,
+
 }
