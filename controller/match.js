@@ -143,3 +143,30 @@ export const adjustPlayerLevel = async (req, res) => {
     res.status(500).json({ message: '레벨 업데이트 실패', error: error.message });
   }
 };
+
+export async function updateMatchPositions(req, res) {
+  try {
+    const { matchId, players, absentPlayers } = req.body;
+
+    if (!matchId || !Array.isArray(players)) {
+      return res.status(400).json({ message: 'matchId와 유효한 players 데이터가 필요합니다.' });
+    }
+
+    console.log('받아온 matchId:', matchId);
+    console.log('받아온 players 데이터:', players);
+    console.log('받아온 불참 유저 데이터:', absentPlayers);
+
+    // 팀 포지션 업데이트
+    await matchData.updateMatchUserPositions(players);
+
+    // 불참 상태 업데이트
+    if (Array.isArray(absentPlayers) && absentPlayers.length > 0) {
+      await matchData.updateAbsentPlayers(absentPlayers);
+    }
+
+    res.status(200).json({ message: '포지션 및 불참 상태가 성공적으로 업데이트되었습니다.' });
+  } catch (error) {
+    console.error('포지션 및 불참 상태 업데이트 오류:', error.message);
+    res.status(500).json({ message: '포지션 및 불참 상태 업데이트 중 오류가 발생했습니다.', error: error.message });
+  }
+}
