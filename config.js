@@ -145,4 +145,8 @@ export const config = {
     email: getEnvValue("MANAGER_EMAIL_ACCOUNT"),
     password: getEnvValue("MANAGER_EMAIL_PASSWORD"),
   },
+  iamport:{
+    api_key: getEnvValue("IAMPORT_API_KEY"), 
+    api_secret: getEnvValue("IAMPORT_API_SECRET"), 
+  }
 };
