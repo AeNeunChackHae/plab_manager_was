@@ -10,5 +10,6 @@ router.post('/match-apply', isAuth, matchController.applyForMatch);
 router.post('/players', isAuth, matchController.fetchPlayers);
 router.post('/save-cards', isAuth, matchController.saveMatchCards);
 router.post('/update-levels',isAuth, matchController.adjustPlayerLevel);
+router.post('/update-positions', isAuth, matchController.updateMatchPositions);
 
 export default router;
