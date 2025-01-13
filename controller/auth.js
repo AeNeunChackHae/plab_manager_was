@@ -108,6 +108,24 @@ export async function me(req, res, next) {
   res.status(200).json({ token: req.token, id: user.id });
 }
 
+// 로그아웃 처리 
+export const logout = (req, res) => {
+  try {
+    console.log(`User ID: ${req.userId} 로그아웃`);
+
+    res.json({
+      success: true,
+      message: '로그아웃 되었습니다. 브라우저에서 토큰을 삭제해주세요.',
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json({
+      success: false,
+      message: '서버 오류로 로그아웃에 실패했습니다.',
+    });
+  }
+};
+
 // 이메일 찾기위한 유저 확인
 export async function findEmailController(req, res) {
   const { username, phoneNumber } = req.body;
