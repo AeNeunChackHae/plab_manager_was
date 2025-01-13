@@ -148,7 +148,5 @@ export const config = {
   iamport:{
     api_key: getEnvValue("IAMPORT_API_KEY"), 
     api_secret: getEnvValue("IAMPORT_API_SECRET"),
-    api_key: getEnvValue("IAMPORT_API_KEY"), // 아임포트 API 키
-    api_secret: getEnvValue("IAMPORT_API_SECRET"), // 아임포트 시크릿 키
   }
 };
