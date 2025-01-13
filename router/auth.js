@@ -3,6 +3,7 @@ import * as authController from "../controller/auth.js";
 import { body } from "express-validator";
 import { validate } from "../middleware/validator.js";
 import { isAuth } from "../middleware/auth.js";
+import { logout } from "../controller/auth.js"
 
 const router = express.Router();
 
@@ -42,6 +43,9 @@ router.post("/login", validateLogin, authController.login);
 
 // 로그인 유지
 router.get("/me", isAuth, authController.me);
+
+// 사용자 로그아웃
+router.post('/logout',logout)
 
 // 이메일 찾기
 router.post("/find-email", authController.findEmailController);
