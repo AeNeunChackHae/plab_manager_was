@@ -58,6 +58,13 @@ export async function login(req, res, next) {
   try {
     const { email, login_password } = req.body;
 
+    // 입력 값 검증
+    if (!email || !login_password) {
+      return res
+        .status(422)
+        .json({ message: "이메일과 비밀번호를 모두 입력해야 합니다." });
+    }
+
     // 이메일로 사용자 검색
     const user = await authRepository.findByEmail(email);
     if (!user) {
@@ -73,7 +80,9 @@ export async function login(req, res, next) {
       user.login_password
     );
     if (!isValidPassword) {
-      return res.status(401).json({ message: "비밀번호가 일치하지 않습니다." });
+      return res
+        .status(401)
+        .json({ message: "비밀번호가 일치하지 않습니다." });
     }
 
     // JWT 토큰 생성 및 응답
